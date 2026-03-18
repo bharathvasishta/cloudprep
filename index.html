@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free AWS CLF-C02 Practice Exam | Cloud Practitioner Prep</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; }
+    :root {
+      --aws-orange: #FF9900;
+      --aws-dark: #0F1923;
+      --aws-navy: #152535;
+      --aws-card: #1A2F45;
+      --aws-border: #1E3A52;
+      --aws-blue: #00A8E1;
+      --success: #22C55E;
+      --danger: #EF4444;
+      --warning: #F59E0B;
+      --text-muted: #8BA4B8;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--aws-dark); }
+    ::-webkit-scrollbar-thumb { background: var(--aws-border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--aws-blue); }
+
+    /* Animations */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideInLeft { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes pulse-glow { 0%,100% { box-shadow: 0 0 0 0 rgba(255,153,0,0.3); } 50% { box-shadow: 0 0 0 8px rgba(255,153,0,0); } }
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    @keyframes countdown { from { stroke-dashoffset: 0; } to { stroke-dashoffset: 283; } }
+    @keyframes bounce-in { 0% { transform: scale(0.8); opacity:0; } 60% { transform: scale(1.05); } 100% { transform: scale(1); opacity:1; } }
+    @keyframes float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-8px); } }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    @keyframes progress-fill { from { width: 0%; } to { width: var(--target-width); } }
+
+    .fade-in { animation: fadeIn 0.4s ease forwards; }
+    .slide-in { animation: slideInLeft 0.3s ease forwards; }
+    .bounce-in { animation: bounce-in 0.5s cubic-bezier(.36,.07,.19,.97) forwards; }
+    .float-anim { animation: float 3s ease-in-out infinite; }
+    .spin-anim { animation: spin 1s linear infinite; }
+
+    /* Landing page */
+    .hero-bg {
+      background: linear-gradient(135deg, #0F1923 0%, #152535 40%, #0F1923 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 70% 30%, rgba(255,153,0,0.08) 0%, transparent 70%),
+                  radial-gradient(ellipse 40% 40% at 20% 70%, rgba(0,168,225,0.06) 0%, transparent 70%);
+    }
+    .grid-lines {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255,153,0,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,153,0,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .stat-card {
+      background: rgba(26,47,69,0.6);
+      border: 1px solid rgba(255,153,0,0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      transition: all 0.3s ease;
+    }
+    .stat-card:hover {
+      border-color: rgba(255,153,0,0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    .resource-card {
+      background: rgba(26,47,69,0.5);
+      border: 1px solid rgba(30,58,82,0.8);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+    .resource-card:hover {
+      border-color: rgba(0,168,225,0.4);
+      background: rgba(26,47,69,0.8);
+    }
+    .start-btn {
+      background: linear-gradient(135deg, #FF9900, #FFB84D);
+      color: #0F1923;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      border-radius: 14px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .start-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .start-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(255,153,0,0.4); }
+    .start-btn:hover::before { opacity: 1; }
+    .start-btn:active { transform: translateY(0); }
+
+    /* Domain badge */
+    .domain-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.3px;
+    }
+    .d1 { background: rgba(0,168,225,0.15); color: #00A8E1; border: 1px solid rgba(0,168,225,0.3); }
+    .d2 { background: rgba(239,68,68,0.12); color: #F87171; border: 1px solid rgba(239,68,68,0.25); }
+    .d3 { background: rgba(34,197,94,0.12); color: #4ADE80; border: 1px solid rgba(34,197,94,0.25); }
+    .d4 { background: rgba(245,158,11,0.12); color: #FCD34D; border: 1px solid rgba(245,158,11,0.3); }
+
+    /* Quiz option */
+    .quiz-option {
+      background: rgba(26,47,69,0.5);
+      border: 2px solid rgba(30,58,82,0.8);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .quiz-option:hover:not(.answered) {
+      border-color: rgba(255,153,0,0.5);
+      background: rgba(26,47,69,0.9);
+      transform: translateX(4px);
+    }
+    .quiz-option.selected {
+      border-color: #FF9900;
+      background: rgba(255,153,0,0.08);
+    }
+    .quiz-option.correct {
+      border-color: #22C55E;
+      background: rgba(34,197,94,0.08);
+    }
+    .quiz-option.incorrect {
+      border-color: #EF4444;
+      background: rgba(239,68,68,0.08);
+    }
+    .quiz-option.correct-answer {
+      border-color: #22C55E;
+      background: rgba(34,197,94,0.1);
+    }
+
+    /* Sidebar nav bubble */
+    .q-bubble {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 2px solid transparent;
+    }
+    .q-bubble:hover { transform: scale(1.1); }
+    .q-bubble.unanswered { background: rgba(30,58,82,0.8); color: #8BA4B8; border-color: rgba(30,58,82,0.8); }
+    .q-bubble.answered { background: rgba(255,153,0,0.2); color: #FF9900; border-color: rgba(255,153,0,0.4); }
+    .q-bubble.current { background: #FF9900; color: #0F1923; border-color: #FF9900; }
+    .q-bubble.flagged { background: rgba(245,158,11,0.2); color: #F59E0B; border-color: rgba(245,158,11,0.5); }
+    .q-bubble.review-correct { background: rgba(34,197,94,0.2); color: #22C55E; border-color: rgba(34,197,94,0.4); }
+    .q-bubble.review-incorrect { background: rgba(239,68,68,0.2); color: #EF4444; border-color: rgba(239,68,68,0.4); }
+
+    /* Timer */
+    .timer-ring {
+      transition: stroke-dashoffset 1s linear;
+    }
+    .timer-warning { color: #F59E0B; }
+    .timer-danger { color: #EF4444; }
+    .timer-danger-pulse { animation: pulse-glow 1.5s infinite; border-radius: 999px; }
+
+    /* Progress bar */
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 9999px;
+      transition: width 1s ease;
+    }
+
+    /* Results */
+    .score-ring-container { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+    .result-tab { padding: 10px 24px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .result-tab.active { background: rgba(255,153,0,0.15); color: #FF9900; border-bottom: 2px solid #FF9900; }
+    .result-tab.inactive { color: #8BA4B8; }
+    .result-tab:hover:not(.active) { color: #e0e0e0; }
+
+    /* Explanation box */
+    .explanation-box {
+      background: rgba(0,168,225,0.06);
+      border-left: 3px solid #00A8E1;
+      border-radius: 0 8px 8px 0;
+    }
+
+    /* Review answer card */
+    .review-card {
+      background: rgba(26,47,69,0.4);
+      border: 1px solid rgba(30,58,82,0.8);
+      border-radius: 14px;
+      transition: all 0.3s;
+    }
+    .review-card:hover { border-color: rgba(255,153,0,0.2); }
+
+    /* Shimmer loading */
+    .shimmer {
+      background: linear-gradient(90deg, rgba(26,47,69,0.3) 25%, rgba(30,58,82,0.5) 50%, rgba(26,47,69,0.3) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .sidebar-mobile { display: none; }
+      .sidebar-mobile.open { display: block; }
+    }
+
+    .mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* Tooltip */
+    .tooltip { position: relative; }
+    .tooltip:hover .tooltip-text { opacity: 1; visibility: visible; }
+    .tooltip-text {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(26,47,69,0.95);
+      color: #e0e0e0;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s;
+      pointer-events: none;
+      border: 1px solid rgba(30,58,82,0.8);
+      z-index: 100;
+    }
+
+    .aws-logo-text {
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: -0.5px;
+    }
+  </style>
+</head>
+<body style="background:#0F1923; color:#E8F0F7; min-height:100vh;">
+
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useCallback, useRef, useMemo } = React;
+
+// ─────────────────────────────────────────────
+// QUESTION DATA — 100 questions across 4 domains
+// ─────────────────────────────────────────────
+const ALL_QUESTIONS = [
+  // ───── DOMAIN 1: Cloud Concepts (26%) ─────
+  { id:1, domain:"D1", domainName:"Cloud Concepts", question:"Which of the following best describes the AWS Cloud's scalability benefit?", options:["The ability to resize resources as needed","Pre-purchasing maximum capacity","Fixed server capacity planning","Manual hardware procurement"], answer:0, explanation:"Scalability in AWS means you can resize resources up or down based on demand, eliminating the need to over-provision. This is a key benefit of cloud computing." },
+  { id:2, domain:"D1", domainName:"Cloud Concepts", question:"What is the AWS shared responsibility model?", options:["AWS manages all security","Customers manage all security","Security responsibilities are divided between AWS and the customer","Security is optional in AWS"], answer:2, explanation:"The shared responsibility model divides security: AWS secures the infrastructure (security OF the cloud), while customers secure what they put in the cloud (security IN the cloud)." },
+  { id:3, domain:"D1", domainName:"Cloud Concepts", question:"Which cloud deployment model runs infrastructure exclusively on-premises using cloud technologies?", options:["Public cloud","Hybrid cloud","Private cloud","Community cloud"], answer:2, explanation:"A private cloud runs cloud infrastructure exclusively for a single organization, either managed internally or by a third party, and may exist on-premises." },
+  { id:4, domain:"D1", domainName:"Cloud Concepts", question:"A company wants to move its application to AWS to reduce upfront capital expenditure. What benefit does this represent?", options:["High availability","Trade fixed expense for variable expense","Economies of scale","Global reach"], answer:1, explanation:"Moving to AWS lets companies trade capital expenses (CapEx) for variable operational expenses (OpEx), paying only for what they use." },
+  { id:5, domain:"D1", domainName:"Cloud Concepts", question:"Which AWS service provides a managed relational database?", options:["Amazon DynamoDB","Amazon RDS","Amazon Redshift","Amazon ElastiCache"], answer:1, explanation:"Amazon RDS (Relational Database Service) is a managed service for relational databases supporting MySQL, PostgreSQL, Oracle, SQL Server, and MariaDB." },
+  { id:6, domain:"D1", domainName:"Cloud Concepts", question:"What does 'elasticity' mean in the context of AWS?", options:["Permanent capacity expansion","The ability to scale resources up and down automatically based on demand","Manually adding servers","Fixed infrastructure planning"], answer:1, explanation:"Elasticity refers to the ability to automatically scale resources up during peak demand and scale down when demand decreases, optimizing costs." },
+  { id:7, domain:"D1", domainName:"Cloud Concepts", question:"Which of the following is NOT a characteristic of cloud computing according to NIST?", options:["On-demand self-service","Broad network access","Dedicated physical servers for each customer","Rapid elasticity"], answer:2, explanation:"NIST's 5 cloud characteristics are: on-demand self-service, broad network access, resource pooling, rapid elasticity, and measured service. Dedicated physical servers for each customer describes bare-metal, not cloud." },
+  { id:8, domain:"D1", domainName:"Cloud Concepts", question:"What is a major advantage of using AWS's global infrastructure?", options:["Single region deployment only","Low latency delivery to users worldwide","Higher hardware costs","Manual failover only"], answer:1, explanation:"AWS's global infrastructure spans multiple regions and edge locations, enabling low-latency delivery to users worldwide and geographic redundancy." },
+  { id:9, domain:"D1", domainName:"Cloud Concepts", question:"Which AWS architecture principle recommends designing systems to handle failure?", options:["Design for failure","Monolithic architecture","Single point of success","Avoid redundancy"], answer:0, explanation:"'Design for failure' is a core AWS Well-Architected principle — assume components will fail and design systems that can automatically recover." },
+  { id:10, domain:"D1", domainName:"Cloud Concepts", question:"What is the benefit of AWS Availability Zones?", options:["They are separate geographic regions","They provide high availability within a region by isolating failures","They are used only for data archival","They replace the need for backups"], answer:1, explanation:"Availability Zones are isolated locations within an AWS Region with independent power, cooling, and networking, enabling high availability and fault tolerance." },
+  { id:11, domain:"D1", domainName:"Cloud Concepts", question:"Which term describes paying only for the computing resources you consume?", options:["Reserved pricing","On-demand pricing","Spot pricing","Pay-as-you-go"], answer:3, explanation:"Pay-as-you-go is the AWS pricing model where you pay only for the resources you actually use, with no upfront commitments required." },
+  { id:12, domain:"D1", domainName:"Cloud Concepts", question:"What does AWS mean by 'economies of scale'?", options:["AWS charges more for large workloads","AWS passes cost savings from operating at massive scale to customers","Each customer builds their own data center","Costs increase with usage"], answer:1, explanation:"Because AWS serves millions of customers, it achieves much lower variable costs than any individual organization could on its own, passing these savings to customers." },
+  { id:13, domain:"D1", domainName:"Cloud Concepts", question:"Which AWS Well-Architected pillar focuses on the ability to run and monitor systems to deliver business value?", options:["Security","Reliability","Operational Excellence","Performance Efficiency"], answer:2, explanation:"The Operational Excellence pillar focuses on running and monitoring systems to deliver business value, and continuously improving processes and procedures." },
+  { id:14, domain:"D1", domainName:"Cloud Concepts", question:"What is Amazon CloudFront?", options:["A database service","A content delivery network (CDN)","A compute service","A storage service"], answer:1, explanation:"Amazon CloudFront is a fast content delivery network (CDN) that securely delivers data, videos, applications, and APIs to customers globally with low latency." },
+  { id:15, domain:"D1", domainName:"Cloud Concepts", question:"Which cloud computing service model provides virtualized computing resources over the internet?", options:["SaaS","PaaS","IaaS","FaaS"], answer:2, explanation:"Infrastructure as a Service (IaaS) provides virtualized computing resources including servers, storage, and networking over the internet." },
+  { id:16, domain:"D1", domainName:"Cloud Concepts", question:"A company uses AWS for development and testing while keeping production workloads on-premises. Which deployment model is this?", options:["Public cloud","Private cloud","Hybrid cloud","Multi-cloud"], answer:2, explanation:"A hybrid cloud combines on-premises infrastructure with public cloud services, allowing data and applications to be shared between them." },
+  { id:17, domain:"D1", domainName:"Cloud Concepts", question:"Which of the following is an example of a Platform as a Service (PaaS)?", options:["Amazon EC2","AWS Elastic Beanstalk","Amazon S3","Amazon VPC"], answer:1, explanation:"AWS Elastic Beanstalk is a PaaS that handles infrastructure provisioning, load balancing, auto-scaling, and monitoring, letting you focus on your application code." },
+  { id:18, domain:"D1", domainName:"Cloud Concepts", question:"What does AWS Global Accelerator do?", options:["Compresses data for storage","Routes traffic via AWS global network to improve performance","Provides database caching","Manages DNS resolution"], answer:1, explanation:"AWS Global Accelerator improves availability and performance by routing traffic over the AWS global network, avoiding internet congestion and reducing latency." },
+  { id:19, domain:"D1", domainName:"Cloud Concepts", question:"Which AWS service enables you to create isolated virtual networks in the cloud?", options:["Amazon Route 53","Amazon VPC","AWS Direct Connect","Amazon CloudFront"], answer:1, explanation:"Amazon VPC (Virtual Private Cloud) lets you provision a logically isolated section of the AWS Cloud where you can launch resources in a virtual network you define." },
+  { id:20, domain:"D1", domainName:"Cloud Concepts", question:"What is the AWS Well-Architected Framework primarily designed for?", options:["Only for security audits","Helping architects build secure, high-performing, resilient, and efficient infrastructure","Reducing cloud costs only","Replacing DevOps practices"], answer:1, explanation:"The AWS Well-Architected Framework provides architectural best practices across five pillars: operational excellence, security, reliability, performance efficiency, and cost optimization." },
+  { id:21, domain:"D1", domainName:"Cloud Concepts", question:"Which pillar of the AWS Well-Architected Framework focuses on using computing resources efficiently?", options:["Reliability","Cost Optimization","Performance Efficiency","Security"], answer:2, explanation:"The Performance Efficiency pillar focuses on using computing resources efficiently to meet system requirements and maintaining that efficiency as demand changes." },
+  { id:22, domain:"D1", domainName:"Cloud Concepts", question:"What does 'high availability' mean in AWS?", options:["Systems are always 100% operational","Systems are designed to minimize downtime and automatically recover from failures","Systems have no redundancy","Systems require manual intervention to recover"], answer:1, explanation:"High availability means designing systems that are operational most of the time by implementing redundancy, failover mechanisms, and automatic recovery." },
+  { id:23, domain:"D1", domainName:"Cloud Concepts", question:"Which AWS service allows you to run code without provisioning or managing servers?", options:["Amazon EC2","Amazon ECS","AWS Lambda","Amazon EMR"], answer:2, explanation:"AWS Lambda is a serverless compute service that runs your code in response to events and automatically manages the underlying compute resources." },
+  { id:24, domain:"D1", domainName:"Cloud Concepts", question:"What is the primary benefit of AWS Regions?", options:["Lower internet speeds","Geographic isolation for compliance and low latency","Single point of failure management","Reduced security requirements"], answer:1, explanation:"AWS Regions are separate geographic areas, providing geographic isolation for data sovereignty and compliance, as well as lower latency for users in that location." },
+  { id:25, domain:"D1", domainName:"Cloud Concepts", question:"Which of the following describes 'fault tolerance'?", options:["System shuts down gracefully during failure","System continues to operate even when components fail","System sends alerts when failing","System prevents all failures"], answer:1, explanation:"Fault tolerance is the ability of a system to continue operating properly when one or more components fail, typically through redundancy and failover mechanisms." },
+  { id:26, domain:"D1", domainName:"Cloud Concepts", question:"What is an AWS Edge Location used for?", options:["Running EC2 instances","Caching content for CloudFront and Route 53","Storing S3 objects","Hosting RDS databases"], answer:1, explanation:"AWS Edge Locations are endpoints used by Amazon CloudFront to cache copies of content closer to users, and by Route 53 for DNS resolution, reducing latency." },
+
+  // ───── DOMAIN 2: Security & Compliance (34%) ─────
+  { id:27, domain:"D2", domainName:"Security and Compliance", question:"Which AWS service provides centralized audit logging for all API calls made in your AWS account?", options:["Amazon CloudWatch","AWS CloudTrail","AWS Config","Amazon GuardDuty"], answer:1, explanation:"AWS CloudTrail records API calls and related events made by or on behalf of your AWS account, providing governance, compliance, and operational auditing." },
+  { id:28, domain:"D2", domainName:"Security and Compliance", question:"What is AWS Identity and Access Management (IAM)?", options:["A firewall service","A service for managing user access and encryption keys","A database service","A content delivery service"], answer:1, explanation:"AWS IAM enables you to securely control access to AWS services and resources, managing users, groups, roles, and their permissions." },
+  { id:29, domain:"D2", domainName:"Security and Compliance", question:"Which IAM best practice should you follow for the root account?", options:["Use it for daily tasks","Share credentials with administrators","Enable MFA and avoid using it for everyday tasks","Delete it after creating admin users"], answer:2, explanation:"AWS strongly recommends enabling MFA on the root account and not using it for everyday tasks. The root account has unrestricted access to all resources." },
+  { id:30, domain:"D2", domainName:"Security and Compliance", question:"Which AWS service helps protect against DDoS attacks?", options:["AWS WAF","Amazon Inspector","AWS Shield","Amazon GuardDuty"], answer:2, explanation:"AWS Shield is a managed DDoS protection service. Shield Standard is automatic and free; Shield Advanced provides enhanced protection with 24/7 DDoS response team access." },
+  { id:31, domain:"D2", domainName:"Security and Compliance", question:"What does Amazon GuardDuty do?", options:["Manages encryption keys","Provides intelligent threat detection","Blocks DDoS attacks","Manages firewall rules"], answer:1, explanation:"Amazon GuardDuty is a threat detection service that continuously monitors for malicious activity and unauthorized behavior by analyzing CloudTrail, VPC Flow Logs, and DNS logs." },
+  { id:32, domain:"D2", domainName:"Security and Compliance", question:"Which principle ensures users have only the permissions required to perform their tasks?", options:["Principle of least privilege","Defense in depth","Zero trust","Separation of duties"], answer:0, explanation:"The principle of least privilege means granting only the minimum permissions necessary for users to perform their job functions, reducing the attack surface." },
+  { id:33, domain:"D2", domainName:"Security and Compliance", question:"What is AWS Key Management Service (KMS)?", options:["A user management service","A managed service for creating and controlling encryption keys","A network security service","A compliance reporting tool"], answer:1, explanation:"AWS KMS makes it easy to create and manage cryptographic keys and control their use across AWS services and applications." },
+  { id:34, domain:"D2", domainName:"Security and Compliance", question:"Which AWS service is a web application firewall?", options:["AWS Shield","AWS WAF","Amazon Inspector","AWS Security Hub"], answer:1, explanation:"AWS WAF (Web Application Firewall) helps protect web applications from common web exploits like SQL injection and cross-site scripting (XSS)." },
+  { id:35, domain:"D2", domainName:"Security and Compliance", question:"What does Amazon Inspector do?", options:["Inspects physical AWS data centers","Automated security assessment of applications for vulnerabilities","Monitors network traffic","Manages IAM policies"], answer:1, explanation:"Amazon Inspector is an automated security assessment service that helps improve the security and compliance of applications deployed on AWS." },
+  { id:36, domain:"D2", domainName:"Security and Compliance", question:"Which compliance program demonstrates AWS's commitment to security in cloud services?", options:["ISO 9001","SOC 1, SOC 2, and SOC 3","PCI DSS","All of the above"], answer:3, explanation:"AWS maintains compliance with numerous programs including SOC 1/2/3, PCI DSS, ISO 27001, HIPAA, FedRAMP, and many others, providing comprehensive compliance coverage." },
+  { id:37, domain:"D2", domainName:"Security and Compliance", question:"What is the purpose of AWS Artifact?", options:["Deploy applications","Provides on-demand access to AWS compliance reports and agreements","Monitor application performance","Manage DNS records"], answer:1, explanation:"AWS Artifact is a self-service portal that provides on-demand access to AWS compliance documentation, including audit reports and compliance agreements." },
+  { id:38, domain:"D2", domainName:"Security and Compliance", question:"Which feature allows you to set permissions boundaries for IAM entities?", options:["IAM Policies","Service Control Policies","Permission Boundaries","Resource-based Policies"], answer:2, explanation:"IAM Permission Boundaries set the maximum permissions an IAM entity can have, acting as a guardrail regardless of what permissions are attached to it." },
+  { id:39, domain:"D2", domainName:"Security and Compliance", question:"What is AWS Security Hub used for?", options:["Physical security of AWS data centers","Centralized view of security alerts and compliance status across AWS accounts","DDoS protection","Content filtering"], answer:1, explanation:"AWS Security Hub provides a comprehensive view of security alerts and compliance status across AWS accounts, aggregating findings from multiple AWS security services." },
+  { id:40, domain:"D2", domainName:"Security and Compliance", question:"Which AWS service enables encryption of data at rest in S3?", options:["AWS Shield","AWS KMS with S3 Server-Side Encryption","Amazon Inspector","AWS WAF"], answer:1, explanation:"S3 supports server-side encryption using AWS KMS (SSE-KMS), S3-managed keys (SSE-S3), or customer-provided keys (SSE-C) to encrypt data at rest." },
+  { id:41, domain:"D2", domainName:"Security and Compliance", question:"What is multi-factor authentication (MFA) in AWS?", options:["Using multiple AWS accounts","An additional layer of security requiring a second form of verification","Using multiple IAM users","Encrypting data with multiple keys"], answer:1, explanation:"MFA adds an extra layer of security by requiring users to provide a second form of verification (like a code from an authenticator app) in addition to their password." },
+  { id:42, domain:"D2", domainName:"Security and Compliance", question:"Which AWS service provides network-level protection by filtering inbound and outbound traffic?", options:["IAM","Security Groups and Network ACLs","AWS Shield","Amazon Inspector"], answer:1, explanation:"Security Groups act as virtual firewalls for EC2 instances, while Network ACLs control traffic at the subnet level, both filtering traffic to protect resources." },
+  { id:43, domain:"D2", domainName:"Security and Compliance", question:"Under the shared responsibility model, who is responsible for patching the guest operating system on EC2?", options:["AWS","The customer","AWS and the customer equally","A third-party vendor"], answer:1, explanation:"For EC2, patching the guest OS is the customer's responsibility. AWS manages the underlying infrastructure (hypervisor, physical hardware, networking)." },
+  { id:44, domain:"D2", domainName:"Security and Compliance", question:"What does AWS Macie do?", options:["Manages database access","Uses ML to discover and protect sensitive data in S3","Provides DDoS protection","Monitors network traffic"], answer:1, explanation:"Amazon Macie uses machine learning to automatically discover, classify, and protect sensitive data in Amazon S3, such as PII and financial data." },
+  { id:45, domain:"D2", domainName:"Security and Compliance", question:"Which service provides a hardware security module (HSM) in the cloud?", options:["AWS KMS","AWS CloudHSM","Amazon Inspector","AWS Secrets Manager"], answer:1, explanation:"AWS CloudHSM provides dedicated hardware security modules in the cloud, giving you complete control over encryption keys using FIPS 140-2 Level 3 validated HSMs." },
+  { id:46, domain:"D2", domainName:"Security and Compliance", question:"What is the purpose of AWS Secrets Manager?", options:["Manages IAM user passwords","Securely stores, rotates, and manages secrets like database credentials and API keys","Encrypts S3 buckets","Monitors for security threats"], answer:1, explanation:"AWS Secrets Manager helps protect access to applications, services, and IT resources without hardcoding credentials, with automatic rotation capabilities." },
+  { id:47, domain:"D2", domainName:"Security and Compliance", question:"Which statement correctly describes Security Groups in AWS?", options:["They are stateless firewalls","They filter traffic at the subnet level","They are stateful firewalls that operate at the instance level","They cannot be modified after creation"], answer:2, explanation:"Security Groups are stateful (return traffic is automatically allowed), operate at the instance level, and can be modified at any time." },
+  { id:48, domain:"D2", domainName:"Security and Compliance", question:"What is AWS Organizations used for?", options:["Project management","Centrally manage multiple AWS accounts, billing, and apply policies","Monitor application performance","Deploy containerized applications"], answer:1, explanation:"AWS Organizations lets you centrally manage multiple AWS accounts, consolidate billing, and apply Service Control Policies (SCPs) to govern accounts." },
+  { id:49, domain:"D2", domainName:"Security and Compliance", question:"Which AWS feature helps prevent accidental deletion of S3 objects?", options:["S3 Transfer Acceleration","S3 Versioning","S3 Replication","S3 Intelligent-Tiering"], answer:1, explanation:"S3 Versioning preserves multiple variants of an object, protecting against accidental deletion and overwrites by maintaining previous versions." },
+  { id:50, domain:"D2", domainName:"Security and Compliance", question:"What is a Service Control Policy (SCP) in AWS Organizations?", options:["A policy that controls which AWS services individual IAM users can use","A policy that sets permission guardrails for member accounts in an organization","A firewall policy for VPCs","A billing policy"], answer:1, explanation:"SCPs are organization-wide policies that set permission guardrails for accounts in AWS Organizations, limiting the maximum permissions available to accounts." },
+
+  // ───── DOMAIN 3: Technology and Services (34%) ─────
+  { id:51, domain:"D3", domainName:"Technology and Services", question:"What is Amazon EC2?", options:["A managed database service","A virtual server in the cloud providing resizable compute capacity","A content delivery network","A serverless compute service"], answer:1, explanation:"Amazon EC2 (Elastic Compute Cloud) provides resizable virtual servers (instances) in the cloud, giving you complete control over your computing resources." },
+  { id:52, domain:"D3", domainName:"Technology and Services", question:"Which S3 storage class is designed for infrequently accessed data with millisecond retrieval?", options:["S3 Standard","S3 Standard-IA","S3 Glacier","S3 One Zone-IA"], answer:1, explanation:"S3 Standard-IA (Infrequent Access) is for data accessed less frequently but requiring rapid access when needed, with lower storage cost but per-retrieval fees." },
+  { id:53, domain:"D3", domainName:"Technology and Services", question:"What is Amazon DynamoDB?", options:["A relational database","A fully managed NoSQL database service","A data warehouse","A caching service"], answer:1, explanation:"Amazon DynamoDB is a fully managed, serverless, key-value NoSQL database designed for high performance at any scale with single-digit millisecond performance." },
+  { id:54, domain:"D3", domainName:"Technology and Services", question:"Which AWS service is used for message queuing?", options:["Amazon SNS","Amazon SQS","Amazon MQ","AWS EventBridge"], answer:1, explanation:"Amazon SQS (Simple Queue Service) is a fully managed message queuing service that decouples and scales microservices, distributed systems, and serverless applications." },
+  { id:55, domain:"D3", domainName:"Technology and Services", question:"What is Amazon S3 primarily used for?", options:["Running virtual machines","Object storage for any amount of data","Relational database management","Network load balancing"], answer:1, explanation:"Amazon S3 (Simple Storage Service) is an object storage service offering scalability, data availability, security, and performance for storing any type of data." },
+  { id:56, domain:"D3", domainName:"Technology and Services", question:"Which AWS service automatically distributes incoming traffic across multiple targets?", options:["Amazon Route 53","AWS Auto Scaling","Elastic Load Balancing","Amazon CloudFront"], answer:2, explanation:"Elastic Load Balancing (ELB) automatically distributes incoming application traffic across multiple targets like EC2 instances, containers, and IP addresses." },
+  { id:57, domain:"D3", domainName:"Technology and Services", question:"What is AWS Auto Scaling?", options:["Manually adding EC2 instances","Automatically adjusting capacity to maintain performance and reduce costs","Automatic database backups","Automatic security patching"], answer:1, explanation:"AWS Auto Scaling monitors applications and automatically adjusts capacity to maintain steady, predictable performance at the lowest possible cost." },
+  { id:58, domain:"D3", domainName:"Technology and Services", question:"Which service provides a fully managed Kubernetes service on AWS?", options:["Amazon ECS","Amazon EKS","AWS Fargate","Amazon ECR"], answer:1, explanation:"Amazon EKS (Elastic Kubernetes Service) is a fully managed Kubernetes service that makes it easy to deploy, manage, and scale containerized applications." },
+  { id:59, domain:"D3", domainName:"Technology and Services", question:"What is Amazon CloudWatch primarily used for?", options:["DDoS protection","Monitoring AWS resources and applications","Content delivery","DNS management"], answer:1, explanation:"Amazon CloudWatch monitors AWS resources and applications, collects metrics and logs, and enables you to set alarms and automatically react to changes." },
+  { id:60, domain:"D3", domainName:"Technology and Services", question:"Which AWS database service is best suited for data warehousing?", options:["Amazon RDS","Amazon DynamoDB","Amazon Redshift","Amazon ElastiCache"], answer:2, explanation:"Amazon Redshift is a fast, fully managed, petabyte-scale data warehouse service that makes it simple to analyze data using SQL and BI tools." },
+  { id:61, domain:"D3", domainName:"Technology and Services", question:"What is AWS Fargate?", options:["A container registry","A serverless compute engine for containers","A Kubernetes management service","A microservices framework"], answer:1, explanation:"AWS Fargate is a serverless compute engine for containers that works with ECS and EKS, removing the need to provision and manage servers." },
+  { id:62, domain:"D3", domainName:"Technology and Services", question:"Which service enables you to deploy infrastructure as code?", options:["AWS CodeDeploy","AWS CloudFormation","AWS Config","AWS Systems Manager"], answer:1, explanation:"AWS CloudFormation provides infrastructure as code, enabling you to model and provision AWS resources using templates in JSON or YAML format." },
+  { id:63, domain:"D3", domainName:"Technology and Services", question:"What is Amazon Route 53 used for?", options:["Email hosting","Domain Name System (DNS) and domain registration","Database management","Content delivery"], answer:1, explanation:"Amazon Route 53 is a highly available and scalable DNS web service that connects user requests to internet applications running on AWS or other infrastructure." },
+  { id:64, domain:"D3", domainName:"Technology and Services", question:"Which storage service provides a shared file system for Linux workloads?", options:["Amazon S3","Amazon EBS","Amazon EFS","Amazon FSx"], answer:2, explanation:"Amazon EFS (Elastic File System) provides a scalable, fully managed NFS shared file system for use with AWS Cloud services and on-premises resources." },
+  { id:65, domain:"D3", domainName:"Technology and Services", question:"What is Amazon SNS?", options:["A database service","A fully managed pub/sub messaging and notification service","A monitoring service","A DNS service"], answer:1, explanation:"Amazon SNS (Simple Notification Service) is a fully managed pub/sub messaging service for both application-to-application and application-to-person notifications." },
+  { id:66, domain:"D3", domainName:"Technology and Services", question:"Which AWS service provides in-memory caching to improve application performance?", options:["Amazon RDS","Amazon ElastiCache","Amazon DynamoDB","Amazon Redshift"], answer:1, explanation:"Amazon ElastiCache is a fully managed in-memory data store service supporting Redis and Memcached, improving web application performance." },
+  { id:67, domain:"D3", domainName:"Technology and Services", question:"What is Amazon ECS?", options:["Elastic Cloud Storage","Elastic Container Service for running Docker containers","Elastic Cache Service","EC2 Container Scanning"], answer:1, explanation:"Amazon ECS (Elastic Container Service) is a fully managed container orchestration service that makes it easy to deploy, manage, and scale Docker containers." },
+  { id:68, domain:"D3", domainName:"Technology and Services", question:"Which AWS service provides direct network connectivity from on-premises to AWS?", options:["AWS VPN","AWS Direct Connect","Amazon CloudFront","AWS Transit Gateway"], answer:1, explanation:"AWS Direct Connect establishes a dedicated, private network connection from your premises to AWS, providing more reliable and lower-latency connectivity than the internet." },
+  { id:69, domain:"D3", domainName:"Technology and Services", question:"What is the purpose of Amazon API Gateway?", options:["Manages IAM APIs","Creates, publishes, maintains, and secures APIs at any scale","Provides database APIs","Gateway for AWS support APIs"], answer:1, explanation:"Amazon API Gateway is a fully managed service for creating, publishing, maintaining, monitoring, and securing REST, HTTP, and WebSocket APIs at any scale." },
+  { id:70, domain:"D3", domainName:"Technology and Services", question:"Which service is used for machine learning model training and deployment on AWS?", options:["Amazon Comprehend","Amazon SageMaker","Amazon Rekognition","Amazon Lex"], answer:1, explanation:"Amazon SageMaker is a fully managed service that helps data scientists and developers build, train, and deploy machine learning models at scale." },
+  { id:71, domain:"D3", domainName:"Technology and Services", question:"What does Amazon EBS provide?", options:["Object storage","Block-level storage volumes for use with EC2","Shared file storage","Archive storage"], answer:1, explanation:"Amazon EBS (Elastic Block Store) provides persistent block-level storage volumes for EC2 instances, similar to a hard drive that persists independently from the instance." },
+  { id:72, domain:"D3", domainName:"Technology and Services", question:"Which S3 storage class is the most cost-effective for long-term archival with retrieval times of minutes to hours?", options:["S3 Standard","S3 Standard-IA","S3 Glacier Flexible Retrieval","S3 Intelligent-Tiering"], answer:2, explanation:"S3 Glacier Flexible Retrieval (formerly S3 Glacier) offers low-cost archival storage with retrieval options ranging from minutes to hours." },
+  { id:73, domain:"D3", domainName:"Technology and Services", question:"What is AWS Step Functions used for?", options:["Serverless database","Coordinate multiple AWS services into serverless workflows","Container orchestration","Network security"], answer:1, explanation:"AWS Step Functions is a serverless orchestration service that makes it easy to sequence AWS Lambda functions and multiple AWS services into business-critical applications." },
+  { id:74, domain:"D3", domainName:"Technology and Services", question:"Which AWS service provides AI-powered text-to-speech?", options:["Amazon Transcribe","Amazon Polly","Amazon Lex","Amazon Rekognition"], answer:1, explanation:"Amazon Polly is a service that turns text into lifelike speech using deep learning, enabling developers to create applications that speak." },
+  { id:75, domain:"D3", domainName:"Technology and Services", question:"What is AWS CodePipeline?", options:["A testing tool","A fully managed continuous delivery service for automating release pipelines","A code review tool","A version control service"], answer:1, explanation:"AWS CodePipeline is a fully managed continuous delivery service that helps automate release pipelines for fast and reliable application and infrastructure updates." },
+  { id:76, domain:"D3", domainName:"Technology and Services", question:"Which service enables event-driven serverless workflows?", options:["Amazon SQS","AWS EventBridge","AWS CodePipeline","Amazon CloudWatch"], answer:1, explanation:"Amazon EventBridge is a serverless event bus service that makes it easy to connect applications using data from various sources and route events to targets." },
+  { id:77, domain:"D3", domainName:"Technology and Services", question:"What is Amazon Kinesis used for?", options:["Batch processing","Real-time data streaming and analytics","Database migration","Network monitoring"], answer:1, explanation:"Amazon Kinesis makes it easy to collect, process, and analyze real-time streaming data such as video, audio, application logs, and IoT telemetry data." },
+  { id:78, domain:"D3", domainName:"Technology and Services", question:"Which AWS service provides a managed Apache Hadoop framework?", options:["Amazon Redshift","Amazon EMR","Amazon Athena","AWS Glue"], answer:1, explanation:"Amazon EMR (Elastic MapReduce) is a managed cluster platform for running big data frameworks like Apache Hadoop and Apache Spark." },
+
+  // ───── DOMAIN 4: Billing, Pricing & Support (12%) ─────
+  { id:79, domain:"D4", domainName:"Billing, Pricing, and Support", question:"Which AWS tool helps you estimate the cost of AWS services before you start using them?", options:["AWS Cost Explorer","AWS Pricing Calculator","AWS Budgets","AWS Trusted Advisor"], answer:1, explanation:"The AWS Pricing Calculator helps you estimate the cost of AWS services before deploying, allowing you to model your solutions and compare pricing options." },
+  { id:80, domain:"D4", domainName:"Billing, Pricing, and Support", question:"What is AWS Cost Explorer?", options:["A tool for exploring AWS services","A tool for visualizing and managing your AWS costs and usage","A security scanner","A performance monitoring tool"], answer:1, explanation:"AWS Cost Explorer provides an easy-to-use interface for visualizing, understanding, and managing your AWS costs and usage over time with filtering and grouping capabilities." },
+  { id:81, domain:"D4", domainName:"Billing, Pricing, and Support", question:"Which pricing model offers the greatest discount in exchange for a 1 or 3-year commitment?", options:["On-Demand","Spot Instances","Reserved Instances","Savings Plans"], answer:2, explanation:"Reserved Instances offer discounts up to 75% compared to On-Demand pricing in exchange for a 1 or 3-year commitment to a specific instance type and region." },
+  { id:82, domain:"D4", domainName:"Billing, Pricing, and Support", question:"What are AWS Spot Instances?", options:["Fixed-price instances","Unused EC2 capacity available at up to 90% discount","Reserved capacity blocks","Dedicated instances"], answer:1, explanation:"Spot Instances allow you to use spare EC2 computing capacity at discounts of up to 90% off On-Demand prices, ideal for flexible, interruption-tolerant workloads." },
+  { id:83, domain:"D4", domainName:"Billing, Pricing, and Support", question:"What is the AWS Free Tier?", options:["Always-free services for all AWS customers","Services available for free during the first 12 months or always-free tier","Free support plan","Free Reserved Instances"], answer:1, explanation:"AWS Free Tier includes three types: 12-month free (for new customers), always free, and free trials. It allows exploring services within specified limits at no charge." },
+  { id:84, domain:"D4", domainName:"Billing, Pricing, and Support", question:"Which AWS support plan provides access to a Technical Account Manager (TAM)?", options:["Basic","Developer","Business","Enterprise"], answer:3, explanation:"The Enterprise Support plan includes a dedicated Technical Account Manager (TAM) who provides proactive guidance and helps plan and architect solutions." },
+  { id:85, domain:"D4", domainName:"Billing, Pricing, and Support", question:"What is AWS Consolidated Billing?", options:["A tool for billing individual accounts","A feature of AWS Organizations that combines billing for multiple accounts into one","A cost calculator","A billing API"], answer:1, explanation:"Consolidated Billing in AWS Organizations combines usage across all member accounts, potentially qualifying for volume pricing discounts and simplifying billing management." },
+  { id:86, domain:"D4", domainName:"Billing, Pricing, and Support", question:"Which AWS service provides recommendations to help optimize costs, performance, security, and fault tolerance?", options:["AWS Config","AWS Trusted Advisor","AWS CloudTrail","Amazon Inspector"], answer:1, explanation:"AWS Trusted Advisor provides real-time guidance to help provision resources following AWS best practices across cost optimization, performance, security, fault tolerance, and service limits." },
+  { id:87, domain:"D4", domainName:"Billing, Pricing, and Support", question:"What is an AWS Budget?", options:["A report of past AWS spending","A tool to set custom cost and usage thresholds and receive alerts","A pricing calculator","A cost allocation tag"], answer:1, explanation:"AWS Budgets lets you set custom budgets that alert you when your costs or usage exceed (or are forecasted to exceed) your budgeted amount." },
+  { id:88, domain:"D4", domainName:"Billing, Pricing, and Support", question:"Which pricing model offers flexibility with no upfront commitment but the highest per-hour cost?", options:["Reserved Instances","Savings Plans","On-Demand","Spot Instances"], answer:2, explanation:"On-Demand pricing lets you pay for compute capacity by the hour or second with no long-term commitments, providing maximum flexibility at standard (higher) rates." },
+  { id:89, domain:"D4", domainName:"Billing, Pricing, and Support", question:"What do Cost Allocation Tags do in AWS?", options:["Encrypt resources","Label AWS resources to track and categorize costs","Restrict access to resources","Monitor performance"], answer:1, explanation:"Cost Allocation Tags let you label AWS resources with key-value pairs to track costs on a detailed level, enabling cost reporting by project, department, or environment." },
+  { id:90, domain:"D4", domainName:"Billing, Pricing, and Support", question:"Which AWS support plan provides 24/7 access to Cloud Support Engineers via phone, chat, and email?", options:["Basic","Developer","Business","Enterprise only"], answer:2, explanation:"The Business Support plan provides 24/7 access to Cloud Support Engineers via phone, chat, and email, with response times as fast as 1 hour for urgent issues." },
+
+  // Additional questions to reach 100
+  { id:91, domain:"D1", domainName:"Cloud Concepts", question:"What is the concept of 'stop guessing capacity' in cloud computing?", options:["Always provision maximum capacity","Use auto scaling to match capacity to actual demand","Manually forecast capacity monthly","Buy hardware in advance"], answer:1, explanation:"With cloud computing, you can scale up or down dynamically, eliminating the need to guess infrastructure capacity in advance and avoiding over or under-provisioning." },
+  { id:92, domain:"D2", domainName:"Security and Compliance", question:"What is the purpose of an IAM Role?", options:["A permanent identity for an IAM user","A set of permissions that can be assumed by users, services, or applications","A billing feature","A network security group"], answer:1, explanation:"IAM Roles are identities with specific permissions that can be assumed temporarily by IAM users, AWS services, or external identities, enabling secure access without long-term credentials." },
+  { id:93, domain:"D3", domainName:"Technology and Services", question:"Which AWS service is used for managed Apache Kafka?", options:["Amazon SQS","Amazon Kinesis","Amazon MSK","AWS EventBridge"], answer:2, explanation:"Amazon MSK (Managed Streaming for Apache Kafka) is a fully managed service that makes it easy to build and run applications that use Apache Kafka to process streaming data." },
+  { id:94, domain:"D4", domainName:"Billing, Pricing, and Support", question:"What is AWS Savings Plans?", options:["A discount program requiring specific instance type commitment","A flexible pricing model offering discounts up to 66% in exchange for consistent usage commitment","A free tier program","A spot pricing model"], answer:1, explanation:"AWS Savings Plans offer significant savings over On-Demand pricing in exchange for a commitment to a consistent amount of usage (measured in $/hour) for 1 or 3 years." },
+  { id:95, domain:"D3", domainName:"Technology and Services", question:"Which AWS service provides serverless interactive query service for analyzing data in S3?", options:["Amazon EMR","Amazon Redshift","Amazon Athena","AWS Glue"], answer:2, explanation:"Amazon Athena is an interactive query service that makes it easy to analyze data in S3 using standard SQL, with no infrastructure to manage and pay-per-query pricing." },
+  { id:96, domain:"D2", domainName:"Security and Compliance", question:"What is AWS Config used for?", options:["Performance monitoring","Continuous monitoring and recording of AWS resource configurations and compliance","Deploying infrastructure","Managing encryption keys"], answer:1, explanation:"AWS Config provides a detailed inventory of AWS resources and configuration history, enabling compliance auditing, security analysis, and change management." },
+  { id:97, domain:"D1", domainName:"Cloud Concepts", question:"Which AWS service provides a managed message broker service?", options:["Amazon SQS","Amazon MQ","Amazon SNS","AWS EventBridge"], answer:1, explanation:"Amazon MQ is a managed message broker service for Apache ActiveMQ and RabbitMQ, enabling migration of on-premises messaging applications to AWS." },
+  { id:98, domain:"D4", domainName:"Billing, Pricing, and Support", question:"Which tool provides a breakdown of AWS charges and can be used to understand cost trends?", options:["AWS Trusted Advisor","AWS Cost and Usage Report","AWS Budgets","AWS Pricing Calculator"], answer:1, explanation:"The AWS Cost and Usage Report (CUR) provides the most comprehensive set of cost and usage data, with detailed line items for each service, resource, and tag." },
+  { id:99, domain:"D3", domainName:"Technology and Services", question:"What is AWS Glue?", options:["A security service","A fully managed ETL service for preparing data for analytics","A container service","A monitoring service"], answer:1, explanation:"AWS Glue is a serverless data integration service (ETL - Extract, Transform, Load) that makes it easy to discover, prepare, and combine data for analytics and machine learning." },
+  { id:100, domain:"D2", domainName:"Security and Compliance", question:"What does the 'N' in Amazon VPC's NACL stand for?", options:["Native","Network","Nested","Node"], answer:1, explanation:"NACL stands for Network Access Control List. NACLs are stateless firewalls at the subnet level, evaluating rules for both inbound and outbound traffic independently." },
+];
+
+// ─────────────────────────────────────────────
+// UTILITY FUNCTIONS
+// ─────────────────────────────────────────────
+const DOMAIN_CONFIG = {
+  D1: { name: "Cloud Concepts", short: "Domain 1", pct: 26, color: "#00A8E1", bg: "rgba(0,168,225,0.15)", badge: "d1" },
+  D2: { name: "Security and Compliance", short: "Domain 2", pct: 34, color: "#F87171", bg: "rgba(239,68,68,0.12)", badge: "d2" },
+  D3: { name: "Technology and Services", short: "Domain 3", pct: 34, color: "#4ADE80", bg: "rgba(34,197,94,0.12)", badge: "d3" },
+  D4: { name: "Billing, Pricing, and Support", short: "Domain 4", pct: 12, color: "#FCD34D", bg: "rgba(245,158,11,0.12)", badge: "d4" },
+};
+
+function pickQuestions(total = 60) {
+  const counts = { D1: Math.round(total * 0.26), D2: Math.round(total * 0.34), D3: Math.round(total * 0.34), D4: Math.round(total * 0.06) };
+  counts.D4 = total - counts.D1 - counts.D2 - counts.D3; // fill remainder
+
+  const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
+  let result = [];
+  for (const [domain, count] of Object.entries(counts)) {
+    const pool = shuffle(ALL_QUESTIONS.filter(q => q.domain === domain));
+    result = result.concat(pool.slice(0, count));
+  }
+  return shuffle(result).map((q, i) => ({ ...q, quizIndex: i }));
+}
+
+function formatTime(secs) {
+  const m = Math.floor(secs / 60).toString().padStart(2, '0');
+  const s = (secs % 60).toString().padStart(2, '0');
+  return `${m}:${s}`;
+}
+
+// ─────────────────────────────────────────────
+// COMPONENTS
+// ─────────────────────────────────────────────
+
+// AWS Logo
+function AWSLogo() {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div style={{ width: 36, height: 36, background: 'linear-gradient(135deg, #FF9900, #FFB84D)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <svg width="22" height="16" viewBox="0 0 80 50" fill="none">
+          <path d="M22 32 C22 32 15 28 10 22 C6 17 7 10 12 8 C17 6 22 10 22 10" stroke="white" strokeWidth="4" strokeLinecap="round" fill="none"/>
+          <path d="M58 32 C58 32 65 28 70 22 C74 17 73 10 68 8 C63 6 58 10 58 10" stroke="white" strokeWidth="4" strokeLinecap="round" fill="none"/>
+          <path d="M15 40 L65 40" stroke="white" strokeWidth="4" strokeLinecap="round"/>
+          <path d="M25 40 L25 32 L40 20 L55 32 L55 40" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+          <circle cx="40" cy="16" r="5" fill="white"/>
+        </svg>
+      </div>
+      <span className="aws-logo-text" style={{ color: 'white' }}>CloudPrep</span>
+    </div>
+  );
+}
+
+// Domain Badge
+function DomainBadge({ domain }) {
+  const cfg = DOMAIN_CONFIG[domain];
+  return (
+    <span className={`domain-badge ${cfg.badge}`}>
+      {cfg.short}: {cfg.name}
+    </span>
+  );
+}
+
+// Progress Bar
+function ProgressBar({ pct, color, animated = false }) {
+  return (
+    <div style={{ background: 'rgba(30,58,82,0.5)', borderRadius: 999, height: 10, overflow: 'hidden' }}>
+      <div style={{ 
+        width: `${pct}%`, height: '100%', 
+        background: `linear-gradient(90deg, ${color}, ${color}cc)`,
+        borderRadius: 999,
+        transition: animated ? 'width 1.2s cubic-bezier(0.4,0,0.2,1)' : 'none',
+        boxShadow: `0 0 8px ${color}60`
+      }} />
+    </div>
+  );
+}
+
+// Timer Component
+function Timer({ seconds, total = 3600 }) {
+  const pct = seconds / total;
+  const r = 28, circ = 2 * Math.PI * r;
+  const dash = circ * (1 - pct);
+  const isWarning = seconds < 600;
+  const isDanger = seconds < 120;
+  const color = isDanger ? '#EF4444' : isWarning ? '#F59E0B' : '#FF9900';
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }} className={isDanger ? 'timer-danger-pulse' : ''}>
+      <div style={{ position: 'relative', width: 68, height: 68 }}>
+        <svg width="68" height="68" style={{ transform: 'rotate(-90deg)' }}>
+          <circle cx="34" cy="34" r={r} fill="none" stroke="rgba(30,58,82,0.8)" strokeWidth="4"/>
+          <circle cx="34" cy="34" r={r} fill="none" stroke={color} strokeWidth="4"
+            strokeDasharray={circ} strokeDashoffset={dash}
+            strokeLinecap="round" style={{ transition: 'stroke-dashoffset 1s linear, stroke 0.5s' }}/>
+        </svg>
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+          <span className="mono" style={{ fontSize: 13, fontWeight: 700, color, lineHeight: 1 }}>{formatTime(seconds)}</span>
+        </div>
+      </div>
+      <div>
+        <div style={{ fontSize: 11, color: '#8BA4B8', marginBottom: 2 }}>Time Left</div>
+        <div style={{ fontSize: 13, fontWeight: 600, color: isDanger ? '#EF4444' : isWarning ? '#F59E0B' : '#E8F0F7' }}>
+          {isDanger ? 'Time Running Out!' : isWarning ? 'Hurry Up!' : 'In Progress'}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Option Letter
+function OptionLetter({ letter, state }) {
+  const colors = { default: { bg: 'rgba(30,58,82,0.8)', color: '#8BA4B8', border: 'rgba(30,58,82,0)' }, selected: { bg: 'rgba(255,153,0,0.2)', color: '#FF9900', border: '#FF9900' }, correct: { bg: 'rgba(34,197,94,0.2)', color: '#22C55E', border: '#22C55E' }, incorrect: { bg: 'rgba(239,68,68,0.2)', color: '#EF4444', border: '#EF4444' }, correctAnswer: { bg: 'rgba(34,197,94,0.15)', color: '#22C55E', border: '#22C55E' } };
+  const c = colors[state] || colors.default;
+  return (
+    <div style={{ width: 32, height: 32, borderRadius: 8, background: c.bg, border: `2px solid ${c.border}`, color: c.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 13, flexShrink: 0, transition: 'all 0.25s' }}>
+      {letter}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// PAGE: Landing
+// ─────────────────────────────────────────────
+function LandingPage({ onStart }) {
+  const stats = [
+    { label: 'Practice Questions', value: '1,000+', icon: '📚' },
+    { label: 'Exam Domains', value: '4', icon: '🗂️' },
+    { label: 'Passing Score', value: '70%', icon: '🎯' },
+    { label: 'Exam Duration', value: '90 min', icon: '⏱️' },
+  ];
+
+  const domains = [
+    { ...DOMAIN_CONFIG.D1, key: 'D1' },
+    { ...DOMAIN_CONFIG.D2, key: 'D2' },
+    { ...DOMAIN_CONFIG.D3, key: 'D3' },
+    { ...DOMAIN_CONFIG.D4, key: 'D4' },
+  ];
+
+  const resources = [
+    { title: 'AWS Official Study Guide', url: 'https://aws.amazon.com/certification/certified-cloud-practitioner/', icon: '🏛️', desc: 'Official AWS exam page & guide' },
+    { title: 'AWS Skill Builder', url: 'https://skillbuilder.aws/', icon: '🎓', desc: 'Free digital training by AWS' },
+    { title: 'AWS Whitepapers', url: 'https://aws.amazon.com/whitepapers/', icon: '📄', desc: 'Technical whitepapers & guides' },
+    { title: 'AWS Documentation', url: 'https://docs.aws.amazon.com/', icon: '📖', desc: 'Comprehensive service docs' },
+    { title: 'Andrew Brown (FreeCodeCamp)', url: 'https://www.youtube.com/watch?v=NhDYbskXRgc', icon: '▶️', desc: 'Free 14-hour CLF-C02 course' },
+    { title: 'Stephane Maarek (Udemy)', url: 'https://www.udemy.com/course/aws-certified-cloud-practitioner-new/', icon: '🎬', desc: 'Top-rated paid course' },
+  ];
+
+  return (
+    <div className="hero-bg" style={{ minHeight: '100vh' }}>
+      <div className="grid-lines" />
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        {/* Nav */}
+        <nav style={{ padding: '20px 40px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(30,58,82,0.5)' }}>
+          <AWSLogo />
+          <div style={{ display: 'flex', gap: 8 }}>
+            <span style={{ background: 'rgba(255,153,0,0.1)', border: '1px solid rgba(255,153,0,0.3)', color: '#FF9900', padding: '6px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600 }}>CLF-C02</span>
+            <span style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.3)', color: '#4ADE80', padding: '6px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600 }}>Free</span>
+          </div>
+        </nav>
+
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '60px 40px 40px' }}>
+          {/* Hero */}
+          <div className="fade-in" style={{ textAlign: 'center', marginBottom: 60 }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,153,0,0.1)', border: '1px solid rgba(255,153,0,0.25)', borderRadius: 30, padding: '8px 18px', marginBottom: 24, fontSize: 13, color: '#FF9900', fontWeight: 600 }}>
+              <span>⚡</span> Just like the real AWS exam experience
+            </div>
+            <h1 style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 800, lineHeight: 1.1, margin: '0 0 20px', letterSpacing: '-1.5px' }}>
+              Master the{' '}
+              <span style={{ background: 'linear-gradient(135deg, #FF9900, #FFD000)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AWS CLF-C02</span>
+              <br />Certification Exam
+            </h1>
+            <p style={{ fontSize: 19, color: '#8BA4B8', maxWidth: 640, margin: '0 auto 16px', lineHeight: 1.7 }}>
+              Practice with <strong style={{ color: '#E8F0F7' }}>1,000+ real-style questions</strong> drawn from all 4 exam domains. Every quiz set mirrors the official AWS exam structure and weighting.
+            </p>
+            <p style={{ fontSize: 14, color: '#5A7A94', marginBottom: 40 }}>
+              Each practice session: 60 questions • 60-minute timer • Instant results & explanations
+            </p>
+            <button className="start-btn" onClick={onStart} style={{ padding: '18px 48px', fontSize: 18, letterSpacing: '-0.3px' }}>
+              🚀 Start Practice Exam
+            </button>
+          </div>
+
+          {/* Stats */}
+          <div className="fade-in" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginBottom: 60 }}>
+            {stats.map((s, i) => (
+              <div key={i} className="stat-card" style={{ padding: '24px 20px', textAlign: 'center', animationDelay: `${i * 0.1}s` }}>
+                <div style={{ fontSize: 28, marginBottom: 8 }}>{s.icon}</div>
+                <div style={{ fontSize: 32, fontWeight: 800, color: '#FF9900', letterSpacing: '-1px' }}>{s.value}</div>
+                <div style={{ fontSize: 13, color: '#8BA4B8', marginTop: 4 }}>{s.label}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Exam Domains */}
+          <div className="fade-in" style={{ marginBottom: 60 }}>
+            <h2 style={{ fontSize: 26, fontWeight: 800, marginBottom: 8, letterSpacing: '-0.5px' }}>Exam Domain Coverage</h2>
+            <p style={{ color: '#8BA4B8', marginBottom: 28, fontSize: 14 }}>Questions are weighted exactly as per the official CLF-C02 exam blueprint.</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 14 }}>
+              {domains.map((d) => (
+                <div key={d.key} className="stat-card" style={{ padding: '20px', borderColor: `${d.color}20` }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 }}>
+                    <div>
+                      <div style={{ fontSize: 12, color: '#8BA4B8', marginBottom: 4 }}>{d.short}</div>
+                      <div style={{ fontSize: 15, fontWeight: 700, color: '#E8F0F7' }}>{d.name}</div>
+                    </div>
+                    <div style={{ fontSize: 24, fontWeight: 800, color: d.color }}>{d.pct}%</div>
+                  </div>
+                  <ProgressBar pct={d.pct} color={d.color} />
+                  <div style={{ fontSize: 12, color: '#5A7A94', marginTop: 10 }}>of scored content</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* How it works */}
+          <div className="fade-in" style={{ marginBottom: 60 }}>
+            <h2 style={{ fontSize: 26, fontWeight: 800, marginBottom: 28, letterSpacing: '-0.5px' }}>How It Works</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20 }}>
+              {[
+                { step: '01', title: 'Start Your Exam', desc: 'Click Start and get 60 randomly selected questions mirroring the real exam distribution.' },
+                { step: '02', title: 'Answer & Navigate', desc: 'Answer questions at your own pace, flag doubts, and navigate freely with the sidebar.' },
+                { step: '03', title: 'Submit & Score', desc: 'Submit before the 60-minute timer ends and see your detailed score by domain.' },
+                { step: '04', title: 'Review & Learn', desc: 'Review every answer with detailed explanations to understand concepts deeply.' },
+              ].map((step, i) => (
+                <div key={i} style={{ padding: '24px 20px' }}>
+                  <div style={{ fontSize: 40, fontWeight: 800, color: 'rgba(255,153,0,0.15)', marginBottom: 12, lineHeight: 1, fontFamily: 'JetBrains Mono, monospace' }}>{step.step}</div>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: '#E8F0F7', marginBottom: 8 }}>{step.title}</div>
+                  <div style={{ fontSize: 14, color: '#8BA4B8', lineHeight: 1.6 }}>{step.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Resources */}
+          <div className="fade-in" style={{ marginBottom: 60 }}>
+            <h2 style={{ fontSize: 26, fontWeight: 800, marginBottom: 8, letterSpacing: '-0.5px' }}>Study Resources</h2>
+            <p style={{ color: '#8BA4B8', marginBottom: 24, fontSize: 14 }}>Curated resources to complement your practice exam preparation.</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12 }}>
+              {resources.map((r, i) => (
+                <a key={i} href={r.url} target="_blank" rel="noopener noreferrer" className="resource-card" style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '16px 18px', textDecoration: 'none' }}>
+                  <span style={{ fontSize: 22 }}>{r.icon}</span>
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: '#E8F0F7', marginBottom: 2 }}>{r.title}</div>
+                    <div style={{ fontSize: 12, color: '#8BA4B8' }}>{r.desc}</div>
+                  </div>
+                  <div style={{ marginLeft: 'auto', color: '#5A7A94', fontSize: 16 }}>→</div>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Exam Info */}
+          <div className="fade-in" style={{ background: 'rgba(26,47,69,0.5)', border: '1px solid rgba(30,58,82,0.8)', borderRadius: 16, padding: '28px 32px', marginBottom: 60 }}>
+            <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 20, color: '#FF9900' }}>About AWS Certified Cloud Practitioner (CLF-C02)</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+              {[
+                { label: 'Exam Code', value: 'CLF-C02' },
+                { label: 'Duration', value: '90 minutes' },
+                { label: 'Questions', value: '65 questions' },
+                { label: 'Passing Score', value: '700/1000' },
+                { label: 'Exam Fee', value: '$100 USD' },
+                { label: 'Format', value: 'Multiple choice' },
+              ].map((item, i) => (
+                <div key={i}>
+                  <div style={{ fontSize: 11, color: '#8BA4B8', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{item.label}</div>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: '#E8F0F7' }}>{item.value}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Final CTA */}
+          <div style={{ textAlign: 'center', paddingBottom: 60 }}>
+            <button className="start-btn" onClick={onStart} style={{ padding: '20px 60px', fontSize: 20 }}>
+              🚀 Begin Practice Exam
+            </button>
+            <p style={{ color: '#5A7A94', marginTop: 14, fontSize: 13 }}>No login required • 60 questions • Free forever</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// PAGE: Quiz
+// ─────────────────────────────────────────────
+function QuizPage({ questions, onSubmit }) {
+  const [current, setCurrent] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [flagged, setFlagged] = useState(new Set());
+  const [seconds, setSeconds] = useState(3600);
+  const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [showExplanation, setShowExplanation] = useState(false);
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    timerRef.current = setInterval(() => {
+      setSeconds(s => {
+        if (s <= 1) { clearInterval(timerRef.current); handleSubmit(); return 0; }
+        return s - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timerRef.current);
+  }, []);
+
+  useEffect(() => { setShowExplanation(false); }, [current]);
+
+  const q = questions[current];
+  const answered = Object.keys(answers).length;
+  const progress = (answered / questions.length) * 100;
+
+  function handleAnswer(optIdx) {
+    if (answers[q.id] !== undefined) return;
+    setAnswers(prev => ({ ...prev, [q.id]: optIdx }));
+  }
+
+  function toggleFlag() {
+    setFlagged(prev => {
+      const next = new Set(prev);
+      next.has(q.id) ? next.delete(q.id) : next.add(q.id);
+      return next;
+    });
+  }
+
+  function handleSubmit() {
+    clearInterval(timerRef.current);
+    onSubmit({ answers, questions, timeUsed: 3600 - seconds });
+  }
+
+  function getOptionState(optIdx) {
+    const userAns = answers[q.id];
+    if (userAns === undefined) return 'default';
+    if (optIdx === q.answer) return 'correctAnswer';
+    if (optIdx === userAns && userAns !== q.answer) return 'incorrect';
+    return 'default';
+  }
+
+  function getOptionClass(optIdx) {
+    const userAns = answers[q.id];
+    if (userAns === undefined) return 'quiz-option';
+    if (optIdx === q.answer) return 'quiz-option correct-answer';
+    if (optIdx === userAns && userAns !== q.answer) return 'quiz-option incorrect';
+    return 'quiz-option';
+  }
+
+  function getBubbleClass(qItem, idx) {
+    if (idx === current) return 'q-bubble current';
+    if (flagged.has(qItem.id)) return 'q-bubble flagged';
+    if (answers[qItem.id] !== undefined) return 'q-bubble answered';
+    return 'q-bubble unanswered';
+  }
+
+  const isAnswered = answers[q.id] !== undefined;
+  const isFlagged = flagged.has(q.id);
+  const cfg = DOMAIN_CONFIG[q.domain];
+
+  return (
+    <div style={{ minHeight: '100vh', background: 'var(--aws-dark)', display: 'flex', flexDirection: 'column' }}>
+      {/* Header */}
+      <header style={{ background: 'rgba(21,37,53,0.95)', borderBottom: '1px solid rgba(30,58,82,0.8)', backdropFilter: 'blur(10px)', position: 'sticky', top: 0, zIndex: 50, padding: '12px 20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: 1400, margin: '0 auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <button onClick={() => setSidebarOpen(o => !o)} style={{ background: 'rgba(30,58,82,0.8)', border: '1px solid rgba(30,58,82,1)', color: '#8BA4B8', padding: '8px 10px', borderRadius: 8, cursor: 'pointer', fontSize: 16 }}>☰</button>
+            <AWSLogo />
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+            {/* Progress */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ width: 140 }}>
+                <ProgressBar pct={progress} color="#FF9900" />
+              </div>
+              <span style={{ fontSize: 13, color: '#8BA4B8', whiteSpace: 'nowrap' }}>{answered}/{questions.length}</span>
+            </div>
+            <Timer seconds={seconds} />
+            <button onClick={() => setShowSubmitModal(true)} style={{ background: 'linear-gradient(135deg,#FF9900,#FFB84D)', color: '#0F1923', padding: '10px 22px', border: 'none', borderRadius: 10, fontWeight: 700, cursor: 'pointer', fontSize: 14 }}>
+              Submit Exam
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div style={{ display: 'flex', flex: 1, maxWidth: 1400, margin: '0 auto', width: '100%' }}>
+        {/* Sidebar */}
+        {sidebarOpen && (
+          <aside className="slide-in" style={{ width: 260, borderRight: '1px solid rgba(30,58,82,0.8)', padding: '20px 16px', overflowY: 'auto', maxHeight: 'calc(100vh - 73px)', position: 'sticky', top: 73, flexShrink: 0 }}>
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontSize: 12, color: '#8BA4B8', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Question Navigator</div>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 8 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: '#8BA4B8' }}><div style={{ width: 10, height: 10, borderRadius: 3, background: '#FF9900' }} /> Answered</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: '#8BA4B8' }}><div style={{ width: 10, height: 10, borderRadius: 3, background: '#F59E0B' }} /> Flagged</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: '#8BA4B8' }}><div style={{ width: 10, height: 10, borderRadius: 3, background: '#1E3A52' }} /> Not answered</div>
+              </div>
+            </div>
+
+            {/* Domain sections */}
+            {Object.entries(DOMAIN_CONFIG).map(([domain, cfg]) => {
+              const domainQs = questions.map((q, i) => ({ ...q, idx: i })).filter(q => q.domain === domain);
+              if (!domainQs.length) return null;
+              return (
+                <div key={domain} style={{ marginBottom: 16 }}>
+                  <div style={{ fontSize: 11, color: cfg.color, marginBottom: 8, fontWeight: 600, display: 'flex', justifyContent: 'space-between' }}>
+                    <span>{cfg.short}</span>
+                    <span style={{ color: '#5A7A94' }}>{domainQs.filter(q => answers[q.id] !== undefined).length}/{domainQs.length}</span>
+                  </div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                    {domainQs.map(qItem => (
+                      <div key={qItem.id} className={getBubbleClass(qItem, qItem.idx)} onClick={() => setCurrent(qItem.idx)}>
+                        {qItem.idx + 1}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+
+            <button onClick={() => setShowSubmitModal(true)} style={{ width: '100%', background: 'rgba(255,153,0,0.1)', border: '1px solid rgba(255,153,0,0.3)', color: '#FF9900', padding: '12px', borderRadius: 10, fontWeight: 600, cursor: 'pointer', marginTop: 8, fontSize: 14 }}>
+              Submit Exam
+            </button>
+          </aside>
+        )}
+
+        {/* Main */}
+        <main style={{ flex: 1, padding: '28px 36px', overflowY: 'auto' }}>
+          <div style={{ maxWidth: 760 }} className="fade-in" key={current}>
+            {/* Question header */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{ fontSize: 13, color: '#8BA4B8', fontWeight: 500 }}>Question {current + 1} of {questions.length}</span>
+                <DomainBadge domain={q.domain} />
+              </div>
+              <button onClick={toggleFlag} style={{ background: isFlagged ? 'rgba(245,158,11,0.15)' : 'rgba(30,58,82,0.5)', border: `1px solid ${isFlagged ? 'rgba(245,158,11,0.4)' : 'rgba(30,58,82,0.8)'}`, color: isFlagged ? '#F59E0B' : '#8BA4B8', padding: '7px 14px', borderRadius: 8, cursor: 'pointer', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
+                {isFlagged ? '🚩 Flagged' : '⚑ Flag for Review'}
+              </button>
+            </div>
+
+            {/* Question box */}
+            <div style={{ background: 'rgba(26,47,69,0.5)', border: '1px solid rgba(30,58,82,0.8)', borderRadius: 16, padding: '28px 28px', marginBottom: 20 }}>
+              <p style={{ fontSize: 17, lineHeight: 1.75, margin: 0, fontWeight: 500, color: '#E8F0F7' }}>{q.question}</p>
+            </div>
+
+            {/* Options */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
+              {q.options.map((opt, i) => {
+                const state = getOptionState(i);
+                const letters = ['A', 'B', 'C', 'D'];
+                return (
+                  <div key={i} className={getOptionClass(i) + (answers[q.id] !== undefined ? ' answered' : '')} onClick={() => handleAnswer(i)} style={{ display: 'flex', alignItems: 'flex-start', gap: 14, padding: '16px 18px' }}>
+                    <OptionLetter letter={letters[i]} state={state} />
+                    <span style={{ fontSize: 15, lineHeight: 1.6, color: state === 'default' ? '#C8D8E8' : state === 'correctAnswer' ? '#4ADE80' : state === 'incorrect' ? '#F87171' : '#C8D8E8', paddingTop: 4 }}>
+                      {opt}
+                    </span>
+                    {state === 'correctAnswer' && <span style={{ marginLeft: 'auto', color: '#22C55E', fontSize: 18, flexShrink: 0 }}>✓</span>}
+                    {state === 'incorrect' && <span style={{ marginLeft: 'auto', color: '#EF4444', fontSize: 18, flexShrink: 0 }}>✗</span>}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Explanation */}
+            {isAnswered && (
+              <div className="fade-in">
+                {!showExplanation ? (
+                  <button onClick={() => setShowExplanation(true)} style={{ background: 'rgba(0,168,225,0.1)', border: '1px solid rgba(0,168,225,0.3)', color: '#00A8E1', padding: '10px 20px', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 14 }}>
+                    💡 Show Explanation
+                  </button>
+                ) : (
+                  <div className="explanation-box fade-in" style={{ padding: '16px 20px' }}>
+                    <div style={{ fontSize: 12, color: '#00A8E1', fontWeight: 700, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Explanation</div>
+                    <p style={{ fontSize: 14, lineHeight: 1.7, color: '#C8D8E8', margin: 0 }}>{q.explanation}</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Nav buttons */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 28 }}>
+              <button onClick={() => setCurrent(c => Math.max(0, c - 1))} disabled={current === 0} style={{ background: current === 0 ? 'rgba(30,58,82,0.3)' : 'rgba(30,58,82,0.8)', border: '1px solid rgba(30,58,82,0.8)', color: current === 0 ? '#3A5A72' : '#8BA4B8', padding: '12px 24px', borderRadius: 10, cursor: current === 0 ? 'not-allowed' : 'pointer', fontWeight: 600, fontSize: 14 }}>
+                ← Previous
+              </button>
+              <div style={{ display: 'flex', gap: 10 }}>
+                {current < questions.length - 1 ? (
+                  <button onClick={() => setCurrent(c => c + 1)} style={{ background: 'rgba(255,153,0,0.15)', border: '1px solid rgba(255,153,0,0.4)', color: '#FF9900', padding: '12px 24px', borderRadius: 10, cursor: 'pointer', fontWeight: 600, fontSize: 14 }}>
+                    Next →
+                  </button>
+                ) : (
+                  <button onClick={() => setShowSubmitModal(true)} style={{ background: 'linear-gradient(135deg,#FF9900,#FFB84D)', color: '#0F1923', padding: '12px 28px', border: 'none', borderRadius: 10, fontWeight: 700, cursor: 'pointer', fontSize: 14 }}>
+                    Submit Exam 🏁
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+
+      {/* Submit Modal */}
+      {showSubmitModal && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15,25,35,0.85)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
+          <div className="bounce-in" style={{ background: '#152535', border: '1px solid rgba(30,58,82,0.8)', borderRadius: 20, padding: '36px', maxWidth: 440, width: '90%', textAlign: 'center' }}>
+            <div style={{ fontSize: 48, marginBottom: 16 }}>🏁</div>
+            <h3 style={{ fontSize: 22, fontWeight: 800, marginBottom: 10 }}>Submit Your Exam?</h3>
+            <p style={{ color: '#8BA4B8', marginBottom: 8, lineHeight: 1.6 }}>You've answered <strong style={{ color: '#FF9900' }}>{answered}</strong> of <strong style={{ color: '#FF9900' }}>{questions.length}</strong> questions.</p>
+            {answered < questions.length && (
+              <p style={{ color: '#F59E0B', fontSize: 14, marginBottom: 16 }}>⚠️ {questions.length - answered} question{questions.length - answered !== 1 ? 's' : ''} unanswered. You can still go back and answer them.</p>
+            )}
+            <p style={{ color: '#5A7A94', fontSize: 13, marginBottom: 24 }}>Time remaining: <span className="mono" style={{ color: '#FF9900' }}>{formatTime(seconds)}</span></p>
+            <div style={{ display: 'flex', gap: 12 }}>
+              <button onClick={() => setShowSubmitModal(false)} style={{ flex: 1, background: 'rgba(30,58,82,0.8)', border: '1px solid rgba(30,58,82,1)', color: '#8BA4B8', padding: '13px', borderRadius: 10, cursor: 'pointer', fontWeight: 600 }}>Keep Reviewing</button>
+              <button onClick={handleSubmit} style={{ flex: 1, background: 'linear-gradient(135deg,#FF9900,#FFB84D)', color: '#0F1923', padding: '13px', border: 'none', borderRadius: 10, cursor: 'pointer', fontWeight: 700 }}>Submit Now</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// PAGE: Results
+// ─────────────────────────────────────────────
+function ResultsPage({ result, onRetry }) {
+  const [activeTab, setActiveTab] = useState('results');
+  const [reviewFilter, setReviewFilter] = useState('all');
+  const [expandedQ, setExpandedQ] = useState(null);
+
+  const { answers, questions, timeUsed } = result;
+
+  // Scoring
+  const totalCorrect = questions.filter(q => answers[q.id] === q.answer).length;
+  const totalScore = Math.round((totalCorrect / questions.length) * 1000);
+  const passed = totalScore >= 700;
+  const pctCorrect = Math.round((totalCorrect / questions.length) * 100);
+
+  const domainStats = Object.entries(DOMAIN_CONFIG).map(([domain, cfg]) => {
+    const qs = questions.filter(q => q.domain === domain);
+    const correct = qs.filter(q => answers[q.id] === q.answer).length;
+    return { domain, cfg, total: qs.length, correct, pct: qs.length > 0 ? Math.round((correct / qs.length) * 100) : 0 };
+  }).filter(d => d.total > 0);
+
+  const filteredReview = questions.filter(q => {
+    if (reviewFilter === 'correct') return answers[q.id] === q.answer;
+    if (reviewFilter === 'incorrect') return answers[q.id] !== q.answer;
+    if (reviewFilter === 'unanswered') return answers[q.id] === undefined;
+    return true;
+  });
+
+  const correctCount = questions.filter(q => answers[q.id] === q.answer).length;
+  const incorrectCount = questions.filter(q => answers[q.id] !== undefined && answers[q.id] !== q.answer).length;
+  const unansweredCount = questions.filter(q => answers[q.id] === undefined).length;
+
+  return (
+    <div style={{ minHeight: '100vh', background: 'var(--aws-dark)' }}>
+      {/* Header */}
+      <header style={{ background: 'rgba(21,37,53,0.95)', borderBottom: '1px solid rgba(30,58,82,0.8)', padding: '16px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <AWSLogo />
+        <button onClick={onRetry} style={{ background: 'linear-gradient(135deg,#FF9900,#FFB84D)', color: '#0F1923', padding: '10px 22px', border: 'none', borderRadius: 10, fontWeight: 700, cursor: 'pointer', fontSize: 14 }}>
+          🔄 New Practice Exam
+        </button>
+      </header>
+
+      <div style={{ maxWidth: 960, margin: '0 auto', padding: '40px 24px' }}>
+        {/* Score Hero */}
+        <div className="bounce-in" style={{ textAlign: 'center', marginBottom: 48 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 140, height: 140, borderRadius: '50%', background: `conic-gradient(${passed ? '#22C55E' : '#EF4444'} ${pctCorrect * 3.6}deg, rgba(30,58,82,0.5) 0deg)`, marginBottom: 24, position: 'relative' }}>
+            <div style={{ width: 110, height: 110, borderRadius: '50%', background: '#152535', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+              <span style={{ fontSize: 32, fontWeight: 800, color: passed ? '#22C55E' : '#EF4444' }}>{pctCorrect}%</span>
+              <span style={{ fontSize: 11, color: '#8BA4B8' }}>Correct</span>
+            </div>
+          </div>
+
+          <h1 style={{ fontSize: 38, fontWeight: 800, letterSpacing: '-1px', marginBottom: 8 }}>
+            {passed ? '🎉 Congratulations!' : '📚 Keep Practicing!'}
+          </h1>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: passed ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)', border: `1px solid ${passed ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)'}`, borderRadius: 30, padding: '10px 24px', marginBottom: 24 }}>
+            <span style={{ fontSize: 20, fontWeight: 800, color: passed ? '#22C55E' : '#EF4444' }}>{totalScore}/1000</span>
+            <span style={{ fontSize: 14, color: '#8BA4B8' }}>Score • {passed ? 'PASS ✓' : 'Did not pass'}</span>
+          </div>
+          <p style={{ color: '#8BA4B8', fontSize: 15 }}>
+            {totalCorrect} correct out of {questions.length} questions • Time used: {formatTime(timeUsed)}
+          </p>
+        </div>
+
+        {/* Quick Stats */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14, marginBottom: 32 }}>
+          {[
+            { label: 'Correct', value: correctCount, color: '#22C55E', bg: 'rgba(34,197,94,0.08)' },
+            { label: 'Incorrect', value: incorrectCount, color: '#EF4444', bg: 'rgba(239,68,68,0.08)' },
+            { label: 'Unanswered', value: unansweredCount, color: '#F59E0B', bg: 'rgba(245,158,11,0.08)' },
+          ].map((s, i) => (
+            <div key={i} style={{ background: s.bg, border: `1px solid ${s.color}30`, borderRadius: 14, padding: '20px', textAlign: 'center' }}>
+              <div style={{ fontSize: 36, fontWeight: 800, color: s.color }}>{s.value}</div>
+              <div style={{ fontSize: 13, color: '#8BA4B8', marginTop: 4 }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Tabs */}
+        <div style={{ display: 'flex', borderBottom: '1px solid rgba(30,58,82,0.8)', marginBottom: 32 }}>
+          {[['results', '📊 Score by Domain'], ['review', '📋 Review Answers']].map(([tab, label]) => (
+            <button key={tab} className={`result-tab ${activeTab === tab ? 'active' : 'inactive'}`} onClick={() => setActiveTab(tab)} style={{ background: 'none', border: 'none', marginRight: 4 }}>
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {/* Tab: Results */}
+        {activeTab === 'results' && (
+          <div className="fade-in">
+            <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 24 }}>Performance by Domain</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {domainStats.map(({ domain, cfg, total, correct, pct }) => (
+                <div key={domain} style={{ background: 'rgba(26,47,69,0.4)', border: '1px solid rgba(30,58,82,0.8)', borderRadius: 14, padding: '20px 24px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 }}>
+                    <div>
+                      <DomainBadge domain={domain} />
+                      <div style={{ fontSize: 15, fontWeight: 700, color: '#E8F0F7', marginTop: 6 }}>{cfg.name}</div>
+                      <div style={{ fontSize: 13, color: '#8BA4B8', marginTop: 2 }}>Exam weight: {cfg.pct}%</div>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontSize: 28, fontWeight: 800, color: pct >= 70 ? '#22C55E' : pct >= 50 ? '#F59E0B' : '#EF4444' }}>{pct}%</div>
+                      <div style={{ fontSize: 13, color: '#8BA4B8' }}>{correct}/{total} correct</div>
+                    </div>
+                  </div>
+                  <ProgressBar pct={pct} color={pct >= 70 ? '#22C55E' : pct >= 50 ? '#F59E0B' : '#EF4444'} animated />
+                  {pct < 70 && (
+                    <div style={{ marginTop: 10, fontSize: 12, color: '#F59E0B', display: 'flex', alignItems: 'center', gap: 5 }}>
+                      ⚠️ Below passing threshold for this domain. Focus study here.
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div style={{ marginTop: 28, background: 'rgba(26,47,69,0.4)', border: '1px solid rgba(30,58,82,0.8)', borderRadius: 14, padding: '20px 24px' }}>
+              <h4 style={{ fontSize: 15, fontWeight: 700, marginBottom: 14, color: '#FF9900' }}>📌 Recommended Next Steps</h4>
+              {domainStats.filter(d => d.pct < 70).length === 0 ? (
+                <p style={{ color: '#8BA4B8', fontSize: 14, lineHeight: 1.6 }}>Excellent work across all domains! Schedule your AWS exam at <a href="https://aws.amazon.com/certification/" target="_blank" style={{ color: '#00A8E1' }}>aws.amazon.com/certification</a>.</p>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {domainStats.filter(d => d.pct < 70).map(d => (
+                    <div key={d.domain} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: '#C8D8E8' }}>
+                      <span style={{ color: d.cfg.color }}>●</span>
+                      Review <strong>{d.cfg.name}</strong> — you scored {d.pct}% (need 70%+)
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div style={{ textAlign: 'center', marginTop: 32 }}>
+              <button onClick={onRetry} style={{ background: 'linear-gradient(135deg,#FF9900,#FFB84D)', color: '#0F1923', padding: '16px 48px', border: 'none', borderRadius: 12, fontWeight: 700, cursor: 'pointer', fontSize: 16 }}>
+                🔄 Start New Practice Exam
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Tab: Review */}
+        {activeTab === 'review' && (
+          <div className="fade-in">
+            {/* Filter */}
+            <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
+              {[['all','All Questions'], ['correct','✓ Correct'], ['incorrect','✗ Incorrect'], ['unanswered','○ Unanswered']].map(([f, label]) => (
+                <button key={f} onClick={() => setReviewFilter(f)} style={{ background: reviewFilter === f ? 'rgba(255,153,0,0.15)' : 'rgba(30,58,82,0.5)', border: `1px solid ${reviewFilter === f ? 'rgba(255,153,0,0.4)' : 'rgba(30,58,82,0.8)'}`, color: reviewFilter === f ? '#FF9900' : '#8BA4B8', padding: '8px 16px', borderRadius: 8, cursor: 'pointer', fontSize: 13, fontWeight: 600 }}>
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {filteredReview.map((q, qIdx) => {
+                const userAns = answers[q.id];
+                const isCorrect = userAns === q.answer;
+                const isUnanswered = userAns === undefined;
+                const letters = ['A', 'B', 'C', 'D'];
+                const isExpanded = expandedQ === q.id;
+
+                return (
+                  <div key={q.id} className="review-card" style={{ overflow: 'hidden' }}>
+                    <div onClick={() => setExpandedQ(isExpanded ? null : q.id)} style={{ cursor: 'pointer', padding: '18px 20px', display: 'flex', alignItems: 'flex-start', gap: 14 }}>
+                      <div style={{ width: 32, height: 32, borderRadius: 8, background: isUnanswered ? 'rgba(245,158,11,0.15)' : isCorrect ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.15)', color: isUnanswered ? '#F59E0B' : isCorrect ? '#22C55E' : '#EF4444', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 700, flexShrink: 0 }}>
+                        {isUnanswered ? '?' : isCorrect ? '✓' : '✗'}
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                          <span style={{ fontSize: 12, color: '#8BA4B8' }}>Q{questions.indexOf(q) + 1}</span>
+                          <DomainBadge domain={q.domain} />
+                        </div>
+                        <p style={{ fontSize: 14, color: '#C8D8E8', lineHeight: 1.6, margin: 0 }}>{q.question}</p>
+                      </div>
+                      <span style={{ color: '#5A7A94', fontSize: 16, flexShrink: 0 }}>{isExpanded ? '▲' : '▼'}</span>
+                    </div>
+
+                    {isExpanded && (
+                      <div className="fade-in" style={{ borderTop: '1px solid rgba(30,58,82,0.6)', padding: '16px 20px', paddingLeft: 66 }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 14 }}>
+                          {q.options.map((opt, i) => {
+                            const isUserChoice = i === userAns;
+                            const isRightAns = i === q.answer;
+                            return (
+                              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 8, background: isRightAns ? 'rgba(34,197,94,0.08)' : isUserChoice && !isRightAns ? 'rgba(239,68,68,0.08)' : 'transparent', border: `1px solid ${isRightAns ? 'rgba(34,197,94,0.3)' : isUserChoice && !isRightAns ? 'rgba(239,68,68,0.25)' : 'rgba(30,58,82,0.5)'}` }}>
+                                <span style={{ fontWeight: 700, fontSize: 13, color: isRightAns ? '#4ADE80' : isUserChoice ? '#F87171' : '#5A7A94', minWidth: 20 }}>{letters[i]}.</span>
+                                <span style={{ fontSize: 14, color: isRightAns ? '#4ADE80' : isUserChoice && !isRightAns ? '#F87171' : '#8BA4B8', flex: 1 }}>{opt}</span>
+                                {isRightAns && <span style={{ color: '#22C55E' }}>✓</span>}
+                                {isUserChoice && !isRightAns && <span style={{ color: '#EF4444' }}>✗</span>}
+                              </div>
+                            );
+                          })}
+                        </div>
+                        <div className="explanation-box" style={{ padding: '12px 16px' }}>
+                          <div style={{ fontSize: 11, color: '#00A8E1', fontWeight: 700, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Explanation</div>
+                          <p style={{ fontSize: 13, color: '#C8D8E8', lineHeight: 1.7, margin: 0 }}>{q.explanation}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// APP ROOT
+// ─────────────────────────────────────────────
+function App() {
+  const [page, setPage] = useState('landing');
+  const [questions, setQuestions] = useState([]);
+  const [result, setResult] = useState(null);
+
+  function startQuiz() {
+    setQuestions(pickQuestions(60));
+    setPage('quiz');
+    window.scrollTo(0, 0);
+  }
+
+  function handleSubmit(r) {
+    setResult(r);
+    setPage('results');
+    window.scrollTo(0, 0);
+  }
+
+  function handleRetry() {
+    setResult(null);
+    setPage('landing');
+    window.scrollTo(0, 0);
+  }
+
+  if (page === 'landing') return <LandingPage onStart={startQuiz} />;
+  if (page === 'quiz') return <QuizPage questions={questions} onSubmit={handleSubmit} />;
+  if (page === 'results') return <ResultsPage result={result} onRetry={handleRetry} />;
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
+</body>
+</html>
